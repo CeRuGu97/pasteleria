@@ -6,8 +6,9 @@ defineProps({
 defineEmits(['select'])
 
 const options = [
-  { id: 'vainilla', label: 'Vainilla', icon: '🌿', color: '#f5e6c8', description: 'Clásico y aromático', price: 0 },
-  { id: 'chocolate', label: 'Chocolate', icon: '🍫', color: '#6b3a2a', description: 'Intenso y esponjoso', price: 0 },
+  { id: 'vainilla', label: 'Vainilla', icon: '🌿', color: '#f5e6c8', description: 'Clásico y aromático' },
+  { id: 'chocolate', label: 'Chocolate', icon: '🍫', color: '#6b3a2a', description: 'Intenso y esponjoso' },
+  { id: 'moka', label: 'Moka', icon: '☕', color: '#8b5e3c', description: 'Café y chocolate' },
 ]
 </script>
 
@@ -28,7 +29,6 @@ const options = [
         <span class="option-icon">{{ opt.icon }}</span>
         <span class="option-label">{{ opt.label }}</span>
         <span class="option-desc">{{ opt.description }}</span>
-        <span class="option-price option-price--free">Incluido</span>
       </button>
     </div>
   </div>
@@ -51,7 +51,7 @@ const options = [
 
 .options-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
@@ -104,19 +104,5 @@ const options = [
   font-size: 0.7rem;
   opacity: 0.7;
   font-family: 'Nunito', sans-serif;
-}
-
-.option-price {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-top: 0.25rem;
-}
-
-.option-price--free {
-  color: oklch(0.85 0.08 150);
-}
-
-.option-card--selected .option-price--free {
-  color: oklch(0.45 0.15 150);
 }
 </style>

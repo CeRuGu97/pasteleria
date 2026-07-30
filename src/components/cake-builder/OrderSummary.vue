@@ -3,20 +3,41 @@ import { computed } from 'vue'
 
 const props = defineProps({
   selections: { type: Object, required: true },
-  totalPrice: { type: Number, required: true },
 })
 
 defineEmits(['reset'])
 
+const designLabel = computed(() => {
+  const d = props.selections.design
+  if (!d) return '-'
+  if (d.type === 'tematica') return `Con temática: ${d.details?.themeText || ''}`
+  const fruits = d.details?.fruits || []
+  const fruitLabels = { fresas: 'Fresas', durazno: 'Durazno', kiwi: 'Kiwi', 'frutos-rojos': 'Frutos rojos' }
+  const names = fruits.map(f => fruitLabels[f] || f).join(', ')
+  return `Frutos encima: ${names}`
+})
+
 const whatsappMessage = computed(() => {
   const s = props.selections
+  let designMsg = ''
+  if (s.design) {
+    if (s.design.type === 'tematica') {
+      designMsg = `🎨 Diseño: Con temática - ${s.design.details?.themeText || ''}\n`
+    } else {
+      const fruits = s.design.details?.fruits || []
+      const fruitLabels = { fresas: 'Fresas', durazno: 'Durazno', kiwi: 'Kiwi', 'frutos-rojos': 'Frutos rojos' }
+      designMsg = `🍇 Diseño: Frutos encima - ${fruits.map(f => fruitLabels[f] || f).join(', ')}\n`
+    }
+  }
+
   return encodeURIComponent(
     `🍰 ¡Hola! Quiero hacer un pedido:\n\n` +
-    `📏 Tamaño: ${s.size?.label || '-'}\n` +
-    `🎂 Tipo: ${s.type?.label || '-'}\n` +
+    `📏 Pisos: ${s.size?.pisos?.label || '-'}\n` +
+    `👥 Personas: ${s.size?.persons?.label || '-'}\n` +
+    `🍞 Sabor del pan: ${s.flavor?.label || '-'}\n` +
     `🍯 Relleno: ${s.filling?.label || '-'}\n` +
-    `🍞 Pan: ${s.flavor?.label || '-'}\n` +
-    `💰 Precio total: $${props.totalPrice}\n\n` +
+    designMsg +
+    `💝 Dedicatoria: ${s.dedication || '-'}\n\n` +
     `¿Podrían confirmarme disponibilidad y fecha de entrega? 🙏`
   )
 })
@@ -33,50 +54,61 @@ const whatsappLink = computed(() => {
 
     <div class="summary-card">
       <div class="summary-item">
-        <span class="summary-icon">📏</span>
+        <span class="summary-icon">🎂</span>
         <div class="summary-info">
-          <span class="summary-label">Tamaño</span>
-          <span class="summary-value">{{ selections.size?.label }}</span>
+          <span class="summary-label">Pisos</span>
+          <span class="summary-value">{{ selections.size?.pisos?.label }}</span>
         </div>
-        <span class="summary-price">${{ selections.size?.price }}</span>
       </div>
 
       <div class="summary-divider"></div>
 
       <div class="summary-item">
-        <span class="summary-icon">🥛</span>
+        <span class="summary-icon">👥</span>
         <div class="summary-info">
-          <span class="summary-label">Tipo</span>
-          <span class="summary-value">{{ selections.type?.label }}</span>
+          <span class="summary-label">Personas</span>
+          <span class="summary-value">{{ selections.size?.persons?.label }}</span>
         </div>
-        <span class="summary-price">+${{ selections.type?.price }}</span>
       </div>
 
       <div class="summary-divider"></div>
 
       <div class="summary-item">
-        <span class="summary-icon">{{ selections.filling?.icon }}</span>
+        <span class="summary-icon">🍞</span>
+        <div class="summary-info">
+          <span class="summary-label">Sabor del pan</span>
+          <span class="summary-value">{{ selections.flavor?.label }}</span>
+        </div>
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-item">
+        <span class="summary-icon">🍯</span>
         <div class="summary-info">
           <span class="summary-label">Relleno</span>
           <span class="summary-value">{{ selections.filling?.label }}</span>
         </div>
-        <span class="summary-price">+${{ selections.filling?.price }}</span>
       </div>
 
       <div class="summary-divider"></div>
 
       <div class="summary-item">
-        <span class="summary-icon">{{ selections.flavor?.icon }}</span>
+        <span class="summary-icon">✨</span>
         <div class="summary-info">
-          <span class="summary-label">Sabor de pan</span>
-          <span class="summary-value">{{ selections.flavor?.label }}</span>
+          <span class="summary-label">Diseño</span>
+          <span class="summary-value">{{ designLabel }}</span>
         </div>
-        <span class="summary-price">Incluido</span>
       </div>
 
-      <div class="summary-total">
-        <span>Total</span>
-        <span class="summary-total-price">${{ totalPrice }}</span>
+      <div class="summary-divider"></div>
+
+      <div class="summary-item">
+        <span class="summary-icon">💝</span>
+        <div class="summary-info">
+          <span class="summary-label">Dedicatoria</span>
+          <span class="summary-value">{{ selections.dedication || '-' }}</span>
+        </div>
       </div>
     </div>
 
@@ -148,36 +180,13 @@ const whatsappLink = computed(() => {
 .summary-value {
   color: white;
   font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.summary-price {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.85rem;
-  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
 }
 
 .summary-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
   margin: 0.25rem 0;
-}
-
-.summary-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.75rem;
-  margin-top: 0.5rem;
-  border-top: 2px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.summary-total-price {
-  font-size: 1.4rem;
-  color: oklch(0.93 0.04 15);
 }
 
 .summary-actions {

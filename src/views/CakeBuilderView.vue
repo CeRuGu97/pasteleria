@@ -1,34 +1,27 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import CakePreview from '../components/cake-builder/CakePreview.vue'
 import StepProgress from '../components/cake-builder/StepProgress.vue'
 import SizeStep from '../components/cake-builder/SizeStep.vue'
-import TypeStep from '../components/cake-builder/TypeStep.vue'
 import FillingStep from '../components/cake-builder/FillingStep.vue'
 import FlavorStep from '../components/cake-builder/FlavorStep.vue'
+import DesignStep from '../components/cake-builder/DesignStep.vue'
+import DedicationStep from '../components/cake-builder/DedicationStep.vue'
 import OrderSummary from '../components/cake-builder/OrderSummary.vue'
 
-const totalSteps = 4
+const totalSteps = 5
 const currentStep = ref(1)
 
 const selections = reactive({
   size: null,
-  type: null,
-  filling: null,
   flavor: null,
-})
-
-const totalPrice = computed(() => {
-  let price = 0
-  if (selections.size) price += selections.size.price
-  if (selections.type) price += selections.type.price
-  if (selections.filling) price += selections.filling.price
-  if (selections.flavor) price += selections.flavor.price
-  return price
+  filling: null,
+  design: null,
+  dedication: '',
 })
 
 function handleSelect(step, option) {
-  const keys = ['size', 'type', 'filling', 'flavor']
+  const keys = ['size', 'flavor', 'filling', 'design', 'dedication']
   selections[keys[step - 1]] = option
   if (currentStep.value < totalSteps) {
     currentStep.value++
@@ -50,9 +43,10 @@ function prevStep() {
 function reset() {
   currentStep.value = 1
   selections.size = null
-  selections.type = null
-  selections.filling = null
   selections.flavor = null
+  selections.filling = null
+  selections.design = null
+  selections.dedication = ''
 }
 </script>
 
@@ -62,21 +56,17 @@ function reset() {
     <div class="builder-bg-dot builder-bg-dot--b"></div>
 
     <div class="container">
-      <!-- Header -->
       <div class="builder-header">
         <h1 class="builder-logo">🎂 Arma tu pastel</h1>
         <p class="builder-tagline">Personaliza paso a paso tu creación ideal</p>
       </div>
 
-      <!-- Cake Preview -->
       <div class="preview-area">
         <CakePreview :selections="selections" />
       </div>
 
-      <!-- Progress -->
       <StepProgress :current-step="currentStep" :total-steps="totalSteps" />
 
-      <!-- Step Content -->
       <div class="step-area">
         <Transition name="step-fade" mode="out-in">
           <SizeStep
@@ -85,10 +75,10 @@ function reset() {
             :selected="selections.size"
             @select="(opt) => handleSelect(1, opt)"
           />
-          <TypeStep
+          <FlavorStep
             v-else-if="currentStep === 2"
             :key="2"
-            :selected="selections.type"
+            :selected="selections.flavor"
             @select="(opt) => handleSelect(2, opt)"
           />
           <FillingStep
@@ -97,23 +87,27 @@ function reset() {
             :selected="selections.filling"
             @select="(opt) => handleSelect(3, opt)"
           />
-          <FlavorStep
+          <DesignStep
             v-else-if="currentStep === 4"
             :key="4"
-            :selected="selections.flavor"
+            :selected="selections.design"
             @select="(opt) => handleSelect(4, opt)"
+          />
+          <DedicationStep
+            v-else-if="currentStep === 5"
+            :key="5"
+            :selected="selections.dedication"
+            @select="(opt) => handleSelect(5, opt)"
           />
           <OrderSummary
             v-else
-            :key="5"
+            :key="6"
             :selections="selections"
-            :total-price="totalPrice"
             @reset="reset"
           />
         </Transition>
       </div>
 
-      <!-- Navigation -->
       <div v-if="currentStep <= totalSteps" class="builder-nav">
         <button
           class="nav-btn nav-btn--back"

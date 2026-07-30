@@ -25,7 +25,7 @@ const HERO_IMG =
           </div>
 
           <h1 class="hero-heading">
-            Deléitate con el Exquisito Chocolate de
+            Deléitate con los Exquisitos Pasteles de
             <span class="hero-highlight">Fabisweet</span><br />
           </h1>
 

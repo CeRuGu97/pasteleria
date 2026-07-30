@@ -6,9 +6,13 @@ defineProps({
 defineEmits(['select'])
 
 const options = [
-  { id: 'mermelada', label: 'Mermelada', icon: '🍓', color: '#c0392b', description: 'Frutos rojos', price: 40 },
-  { id: 'chocolate', label: 'Chocolate', icon: '🍫', color: '#5d3a1a', description: 'Ganache cremoso', price: 40 },
-  { id: 'cacahuate', label: 'Cacahuate', icon: '🥜', color: '#d4a574', description: 'Crema de cacahuate', price: 30 },
+  { id: 'durazno-crema', label: 'Durazno con crema', icon: '🍑', description: 'Dulce y cremoso' },
+  { id: 'fresas-crema', label: 'Fresas con crema', icon: '🍓', description: 'Clásico irresistible' },
+  { id: 'durazno-nuez', label: 'Durazno con nuez', icon: '🥜', description: 'Textura crujiente' },
+  { id: 'betun-oreo', label: 'Betún de oreo', icon: '🍪', description: 'Sabor a galleta' },
+  { id: 'crema-pastelera', label: 'Crema pastelera', icon: '🍮', description: 'Tradicional y suave' },
+  { id: 'nutela-fresas', label: 'Nutela con fresas', icon: '🍫', description: 'Chocolate y fruta' },
+  { id: 'betun-frutos-rojos', label: 'Betún de frutos rojos', icon: '🫐', description: 'Frutos del bosque' },
 ]
 </script>
 
@@ -22,14 +26,11 @@ const options = [
         v-for="opt in options"
         :key="opt.id"
         :class="['option-card', { 'option-card--selected': selected?.id === opt.id }]"
-        :style="{ '--accent': opt.color }"
         @click="$emit('select', opt)"
       >
-        <div class="option-color-dot" :style="{ background: opt.color }"></div>
         <span class="option-icon">{{ opt.icon }}</span>
         <span class="option-label">{{ opt.label }}</span>
         <span class="option-desc">{{ opt.description }}</span>
-        <span class="option-price">+${{ opt.price }}</span>
       </button>
     </div>
   </div>
@@ -52,7 +53,7 @@ const options = [
 
 .options-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
@@ -61,7 +62,7 @@ const options = [
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  padding: 1.25rem 0.5rem;
+  padding: 1.25rem 0.75rem;
   border-radius: 1rem;
   border: 2px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.08);
@@ -69,7 +70,6 @@ const options = [
   cursor: pointer;
   transition: all 0.25s ease;
   font-family: inherit;
-  position: relative;
 }
 
 .option-card:hover {
@@ -86,31 +86,19 @@ const options = [
   transform: scale(1.03);
 }
 
-.option-color-dot {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
 .option-icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .option-label {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .option-desc {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   opacity: 0.7;
   font-family: 'Nunito', sans-serif;
-}
-
-.option-price {
-  font-weight: 700;
-  font-size: 0.95rem;
-  margin-top: 0.15rem;
 }
 </style>

@@ -1,36 +1,89 @@
 <script setup>
-defineProps({
+import { ref, onMounted } from 'vue'
+
+const props = defineProps({
   selected: { type: Object, default: null },
 })
 
-defineEmits(['select'])
+const emit = defineEmits(['select'])
 
-const options = [
-  { id: 5, label: '5 personas', icon: '👤', description: 'Ideal para reuniones pequeñas', price: 250 },
-  { id: 10, label: '10 personas', icon: '👥', description: 'Perfecto para fiestas familiares', price: 380 },
-  { id: 15, label: '15 personas', icon: '👨‍👩‍👧‍👦', description: 'Para celebraciones medianas', price: 520 },
-  { id: 20, label: '20 personas', icon: '🎉', description: 'La gran celebración', price: 680 },
+const subStep = ref(props.selected ? 'persons' : 'pisos')
+const selectedPiso = ref(props.selected?.pisos || null)
+
+const pisoOptions = [
+  { id: 1, label: '1 Piso', icon: '🎂', description: 'Pastel de un solo nivel' },
+  { id: 2, label: '2 Pisos', icon: '🎂🎂', description: 'Pastel de dos niveles' },
 ]
+
+const persons1Piso = [5, 10, 15, 20, 30, 40, 50, 60]
+const persons2Pisos = [60, 70, 80, 90, 100]
+
+const personsIcons = {
+  5: '👤', 10: '👥', 15: '👨‍👩‍👧‍👦', 20: '🎉',
+  30: '🎊', 40: '🎈', 50: '🥳', 60: '🎇',
+  70: '🎆', 80: '🏰', 90: '⭐', 100: '👑',
+}
+
+function selectPiso(piso) {
+  selectedPiso.value = piso
+  subStep.value = 'persons'
+}
+
+function selectPersons(count) {
+  emit('select', {
+    pisos: selectedPiso.value,
+    persons: { id: count, label: `${count} personas`, icon: personsIcons[count] || '🎂' },
+  })
+}
+
+function backToPisos() {
+  subStep.value = 'pisos'
+  selectedPiso.value = null
+}
 </script>
 
 <template>
   <div class="step-content">
-    <h2 class="step-title">¿Para cuántas personas?</h2>
-    <p class="step-subtitle">Selecciona el tamaño de tu pastel</p>
+    <template v-if="subStep === 'pisos'">
+      <h2 class="step-title">¿Cuántos pisos?</h2>
+      <p class="step-subtitle">Elige el tamaño de tu pastel</p>
 
-    <div class="options-grid">
-      <button
-        v-for="opt in options"
-        :key="opt.id"
-        :class="['option-card', { 'option-card--selected': selected?.id === opt.id }]"
-        @click="$emit('select', opt)"
-      >
-        <span class="option-icon">{{ opt.icon }}</span>
-        <span class="option-label">{{ opt.label }}</span>
-        <span class="option-desc">{{ opt.description }}</span>
-        <span class="option-price">${{ opt.price }}</span>
+      <div class="options-grid">
+        <button
+          v-for="opt in pisoOptions"
+          :key="opt.id"
+          class="option-card"
+          @click="selectPiso(opt)"
+        >
+          <span class="option-icon">{{ opt.icon }}</span>
+          <span class="option-label">{{ opt.label }}</span>
+          <span class="option-desc">{{ opt.description }}</span>
+        </button>
+      </div>
+    </template>
+
+    <template v-else>
+      <h2 class="step-title">¿Para cuántas personas?</h2>
+      <p class="step-subtitle">
+        {{ selectedPiso.id === 1 ? 'Pastel de 1 piso' : 'Pastel de 2 pisos' }}
+      </p>
+
+      <div class="options-grid persons-grid">
+        <button
+          v-for="count in (selectedPiso.id === 1 ? persons1Piso : persons2Pisos)"
+          :key="count"
+          class="option-card option-card--person"
+          @click="selectPersons(count)"
+        >
+          <span class="option-icon">{{ personsIcons[count] || '🎂' }}</span>
+          <span class="option-label">{{ count }} personas</span>
+        </button>
+      </div>
+
+      <button class="back-btn" @click="backToPisos">
+        ◄ Cambiar número de pisos
       </button>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -55,6 +108,10 @@ const options = [
   gap: 0.75rem;
 }
 
+.persons-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .option-card {
   display: flex;
   flex-direction: column;
@@ -76,12 +133,8 @@ const options = [
   transform: translateY(-2px);
 }
 
-.option-card--selected {
-  background: white;
-  border-color: white;
-  color: oklch(0.42 0.19 25);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-  transform: scale(1.03);
+.option-card--person {
+  padding: 1rem 0.5rem;
 }
 
 .option-icon {
@@ -99,18 +152,22 @@ const options = [
   font-family: 'Nunito', sans-serif;
 }
 
-.option-price {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-top: 0.25rem;
+.back-btn {
+  display: block;
+  margin: 1.25rem auto 0;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.option-card--selected .option-desc,
-.option-card--selected .option-price {
-  color: oklch(0.42 0.19 25);
-}
-
-.option-card--selected .option-desc {
-  opacity: 0.6;
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 </style>

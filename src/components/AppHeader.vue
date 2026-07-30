@@ -21,7 +21,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header :class="['app-header', { 'app-header--scrolled': scrolled }]">
+  <header :class="['app-header', 'app-header--scrolled']">
     <div class="container">
       <nav class="nav-wrapper">
         <router-link to="/" class="logo">Fabisweet</router-link>
