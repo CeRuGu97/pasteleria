@@ -39,7 +39,7 @@ onUnmounted(() => {
         </ul>
 
         <div class="cta-desktop">
-          <a href="#" class="btn-primary">Ordena Ahora</a>
+          <router-link to="/personalizar" class="btn-primary">Ordena Ahora</router-link>
         </div>
 
         <button class="mobile-toggle" @click="menuOpen = !menuOpen" aria-label="Toggle menu">

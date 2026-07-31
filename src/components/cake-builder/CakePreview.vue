@@ -20,7 +20,18 @@ const scale = computed(() => {
 })
 
 const cakeColor = computed(() => {
-  return props.selections.flavor ? FLAVOR_COLORS[props.selections.flavor.id] : '#f5e6c8'
+  if (!props.selections.flavor) return '#f5e6c8'
+  return FLAVOR_COLORS[props.selections.flavor.id] || '#f5e6c8'
+})
+
+const topColor = computed(() => {
+  if (!props.selections.flavor?.top) return '#f5e6c8'
+  return FLAVOR_COLORS[props.selections.flavor.top.id] || '#f5e6c8'
+})
+
+const bottomColor = computed(() => {
+  if (!props.selections.flavor?.bottom) return '#f5e6c8'
+  return FLAVOR_COLORS[props.selections.flavor.bottom.id] || '#f5e6c8'
 })
 
 const hasTwoPisos = computed(() => props.selections.size?.pisos?.id === 2)
@@ -29,6 +40,11 @@ const hasFilling = computed(() => !!props.selections.filling)
 
 const flavorLabel = computed(() => {
   if (!props.selections.flavor) return '?'
+  if (hasTwoPisos.value && props.selections.flavor.top) {
+    const top = ({ vainilla: 'Vainilla', chocolate: 'Chocolate', moka: 'Moka' })[props.selections.flavor.top.id] || '?'
+    const bottom = ({ vainilla: 'Vainilla', chocolate: 'Chocolate', moka: 'Moka' })[props.selections.flavor.bottom.id] || '?'
+    return `${top} / ${bottom}`
+  }
   const labels = { vainilla: 'Vainilla', chocolate: 'Chocolate', moka: 'Moka' }
   return labels[props.selections.flavor.id] || '?'
 })
@@ -106,7 +122,7 @@ const sizeLabel = computed(() => {
       <!-- ===== TWO PISO CAKE ===== -->
       <template v-else>
         <!-- Bottom tier -->
-        <rect x="35" y="240" width="230" height="95" rx="10" :fill="cakeColor" class="cake-body" />
+        <rect x="35" y="240" width="230" height="95" rx="10" :fill="bottomColor" class="cake-body" />
         <rect x="35" y="240" width="230" height="95" rx="10" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
         <line x1="40" y1="270" x2="260" y2="270" stroke="rgba(0,0,0,0.03)" stroke-width="1" />
         <line x1="40" y1="310" x2="260" y2="310" stroke="rgba(0,0,0,0.03)" stroke-width="1" />
@@ -124,7 +140,7 @@ const sizeLabel = computed(() => {
         />
 
         <!-- Top tier -->
-        <rect x="65" y="170" width="170" height="72" rx="8" :fill="cakeColor" class="cake-body" />
+        <rect x="65" y="170" width="170" height="72" rx="8" :fill="topColor" class="cake-body" />
         <rect x="65" y="170" width="170" height="72" rx="8" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
         <line x1="70" y1="195" x2="230" y2="195" stroke="rgba(0,0,0,0.03)" stroke-width="1" />
         <line x1="70" y1="225" x2="230" y2="225" stroke="rgba(0,0,0,0.03)" stroke-width="1" />

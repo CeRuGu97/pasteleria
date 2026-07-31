@@ -1,8 +1,6 @@
 <script setup>
 import { Sparkles, ArrowRight } from 'lucide-vue-next'
 
-const HERO_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663491895325/2cGsL6BxarosBEUGGWnv8k/dakingo-hero-cake-TVgPdNFYCxmmfmgZuFFebD.webp"
 </script>
 
 <template>
@@ -35,11 +33,11 @@ const HERO_IMG =
           </p>
 
           <div class="hero-actions">
-            <a href="#" class="btn-primary">
+            <router-link to="/personalizar" class="btn-primary">
               Ordene Ahora
               <ArrowRight size="16" />
-            </a>
-            <a href="#" class="btn-outline">Explora los sabores</a>
+            </router-link>
+            <router-link to="/menu" class="btn-outline">Explora los sabores</router-link>
           </div>
 
           <div class="hero-stats">
@@ -65,13 +63,13 @@ const HERO_IMG =
           <div class="hero-blob-secondary"></div>
 
           <div class="hero-image-wrap">
-            <img :src="HERO_IMG" alt="Dakingo Chocolate Raspberry Cake" class="hero-image" />
+            <img src="../assets/img/003.jpeg" alt="Dakingo Chocolate Raspberry Cake" class="hero-image" />
 
             <div class="hero-image-badge">
               <span class="hero-image-emoji">🍫</span>
               <div>
                 <p class="hero-image-label">Pastel de autor</p>
-                <p class="hero-image-subtitle">Chocolate Raspberry</p>
+                <p class="hero-image-subtitle">Feliz día</p>
               </div>
             </div>
           </div>

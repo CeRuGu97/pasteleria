@@ -1,8 +1,6 @@
 <script setup>
 import { ArrowRight } from 'lucide-vue-next'
-
-const VANILLA_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663491895325/2cGsL6BxarosBEUGGWnv8k/dakingo-vanilla-cake-Lja5yRBaCh4u9CK7ywjhi4.webp"
+import VANILLA_IMG from '../assets/img/001.jpg'
 const STRAWBERRY_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663491895325/2cGsL6BxarosBEUGGWnv8k/dakingo-strawberry-cake-Z6KR22LeguVPFanfXwGejs.webp"
 const CARAMEL_IMG =
@@ -11,7 +9,7 @@ const CARAMEL_IMG =
 const flavors = [
   {
     id: 1,
-    label: "Vanilla Bean",
+    label: "Stitch Vanilla",
     description: "Elegancia clásica con auténticas notas de vainilla.",
     img: VANILLA_IMG,
     accent: "oklch(0.97 0.02 80)",
@@ -72,10 +70,10 @@ const flavors = [
           <div class="flavor-text">
             <h3 class="flavor-title">{{ flavor.label }}</h3>
             <p class="flavor-description">{{ flavor.description }}</p>
-            <a href="#" class="flavor-link">
+            <router-link :to="{ path: '/personalizar', query: { pastel: flavor.label } }" class="flavor-link">
               Ordene este sabor
               <ArrowRight size="14" />
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

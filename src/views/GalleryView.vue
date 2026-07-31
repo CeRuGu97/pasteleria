@@ -1,4 +1,8 @@
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const GALLERY = [
   {
     src: "https://d2xsxph8kpxj0f.cloudfront.net/310519663491895325/2cGsL6BxarosBEUGGWnv8k/dakingo-hero-cake-TVgPdNFYCxmmfmgZuFFebD.webp",
@@ -39,13 +43,13 @@ const GALLERY = [
 
     <div class="container">
       <div class="gallery-grid">
-        <article v-for="item in GALLERY" :key="item.title" class="gallery-card">
+        <article v-for="item in GALLERY" :key="item.title" class="gallery-card" @click="router.push({ path: '/personalizar', query: { pastel: item.title } })">
           <div class="gallery-image-wrap">
             <img :src="item.src" :alt="item.alt" class="gallery-image" />
           </div>
           <div class="gallery-info">
             <h3 class="gallery-item-title">{{ item.title }}</h3>
-            <span class="gallery-cta">Ver más →</span>
+            <span class="gallery-cta">Ordenar →</span>
           </div>
         </article>
       </div>

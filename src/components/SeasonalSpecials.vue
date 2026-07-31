@@ -5,9 +5,8 @@ const LAVENDER_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663491895325/2cGsL6BxarosBEUGGWnv8k/dakingo-lavender-cake-7PtWrBzDejL4sCmUD4tZeU.webp"
 
 const features = [
-  { icon: "Leaf", label: "Lavanda fresca", desc: "Procedente de granjas locales" },
-  { icon: "Droplets", label: "Crema de limón", desc: "Elaborada diariamente en casa" },
-  { icon: "Star", label: "Edición limitada", desc: "Solo para la temporada de primavera" },
+  { icon: "Chocolate", label: "Chocolate premium", desc: "Para los amantes del cacao, este pastel es un sueño hecho realidad. Bizcochos de chocolate esponjosos y un relleno cremoso que es pura felicidad en cada bocado." },
+  { icon: "Leaf", label: "Vainilla natural", desc: "Para una celebración dulce y ligera, elige nuestro sabor vainilla. Bizcocho suave y un relleno que sabe a infancia, perfecto para toda la familia." },
 ]
 </script>
 
@@ -20,7 +19,7 @@ const features = [
           <div class="seasonal-blob"></div>
           <div class="seasonal-ring"></div>
           <div class="seasonal-image-wrap">
-            <img :src="LAVENDER_IMG" alt="Spring Lemon Lavender Cake" class="seasonal-image" />
+            <img src="../assets/img/002.jpeg" alt="Spring Lemon Lavender Cake" class="seasonal-image" />
             <div class="seasonal-badge">
               <span class="seasonal-badge-title">Primavera</span>
               <span class="seasonal-badge-icon">🌸</span>
@@ -31,12 +30,11 @@ const features = [
 
         <div class="seasonal-text-column">
           <span class="seasonal-tag">OFERTAS DE TEMPORADA</span>
-          <h2 class="seasonal-title">Limón y lavanda de primavera</h2>
+          <h2 class="seasonal-title">Pastel de Cumpleaños "Pasión y Elegancia"</h2>
           <p class="seasonal-description">
-            Disfruta de la refrescante combinación de notas cítricas y florales en nuestra creación
-            primaveral estrella. Cada pastel lleva capas de crema de limón casera, crema de mantequilla de
-            lavanda fresca y está decorado con flores comestibles: una auténtica celebración de la
-            temporada.
+            Celebra un día inolvidable con este pastel que combina un diseño clásico y atemporal con un sabor excepcional. Nuestro pastel "Pasión y Elegancia" está recubierto con una cobertura de crema blanca suave y sedosa.
+              <br>
+            Su diseño se distingue por un meticuloso festón lateral fruncido y un borde superior de conchas de crema perfectly formadas. El toque de distinción lo dan las delicadas rosas rojas de azúcar, con sus hojas verdes, que coronan el pastel y lo adornan en cascada. En el centro, un elegante "Happy Birthday" en letras doradas resalta la importancia de la ocasión.
           </p>
 
           <div class="seasonal-features">
@@ -56,7 +54,7 @@ const features = [
               Descubrir
               <ArrowRight size="16" />
             </a>
-            <span class="seasonal-note">Disponible hasta el 31 de mayo.</span>
+            <!-- <span class="seasonal-note">Disponible hasta el 31 de mayo.</span> -->
           </div>
         </div>
       </div>

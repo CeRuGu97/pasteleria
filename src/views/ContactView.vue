@@ -13,24 +13,6 @@ import { Phone, Instagram, Facebook } from 'lucide-vue-next'
 
     <div class="container">
       <div class="contact-grid">
-        <div class="contact-form-col">
-          <h2 class="contact-form-title">Envíanos un mensaje</h2>
-          <form class="contact-form" @submit.prevent>
-            <div class="form-group">
-              <label for="name" class="form-label">Nombre</label>
-              <input id="name" type="text" class="form-input" placeholder="Tu nombre" />
-            </div>
-            <div class="form-group">
-              <label for="email" class="form-label">Email</label>
-              <input id="email" type="email" class="form-input" placeholder="tu@email.com" />
-            </div>
-            <div class="form-group">
-              <label for="message" class="form-label">Mensaje</label>
-              <textarea id="message" class="form-textarea" rows="5" placeholder="¿En qué podemos ayudarte?"></textarea>
-            </div>
-            <button type="submit" class="form-submit">Enviar Mensaje</button>
-          </form>
-        </div>
 
         <div class="contact-info-col">
           <h2 class="contact-form-title">Información de Contacto</h2>
@@ -97,7 +79,7 @@ import { Phone, Instagram, Facebook } from 'lucide-vue-next'
 }
 
 .contact-grid {
-  display: grid;
+  /* display: grid; */
   grid-template-columns: 1fr;
   gap: 2.5rem;
   padding: 4rem 0;

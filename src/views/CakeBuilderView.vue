@@ -1,7 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import CakePreview from '../components/cake-builder/CakePreview.vue'
 import StepProgress from '../components/cake-builder/StepProgress.vue'
+import DateStep from '../components/cake-builder/DateStep.vue'
 import SizeStep from '../components/cake-builder/SizeStep.vue'
 import FillingStep from '../components/cake-builder/FillingStep.vue'
 import FlavorStep from '../components/cake-builder/FlavorStep.vue'
@@ -9,19 +11,22 @@ import DesignStep from '../components/cake-builder/DesignStep.vue'
 import DedicationStep from '../components/cake-builder/DedicationStep.vue'
 import OrderSummary from '../components/cake-builder/OrderSummary.vue'
 
-const totalSteps = 5
+const totalSteps = 6
 const currentStep = ref(1)
+const route = useRoute()
 
 const selections = reactive({
+  date: '',
   size: null,
   flavor: null,
   filling: null,
   design: null,
   dedication: '',
+  pastelName: route.query.pastel || null,
 })
 
 function handleSelect(step, option) {
-  const keys = ['size', 'flavor', 'filling', 'design', 'dedication']
+  const keys = ['date', 'size', 'flavor', 'filling', 'design', 'dedication']
   selections[keys[step - 1]] = option
   if (currentStep.value < totalSteps) {
     currentStep.value++
@@ -42,11 +47,13 @@ function prevStep() {
 
 function reset() {
   currentStep.value = 1
+  selections.date = ''
   selections.size = null
   selections.flavor = null
   selections.filling = null
   selections.design = null
   selections.dedication = ''
+  selections.pastelName = null
 }
 </script>
 
@@ -59,6 +66,7 @@ function reset() {
       <div class="builder-header">
         <h1 class="builder-logo">🎂 Arma tu pastel</h1>
         <p class="builder-tagline">Personaliza paso a paso tu creación ideal</p>
+        <p v-if="selections.pastelName" class="builder-badge">✨ Basado en: "{{ selections.pastelName }}"</p>
       </div>
 
       <div class="preview-area">
@@ -69,39 +77,46 @@ function reset() {
 
       <div class="step-area">
         <Transition name="step-fade" mode="out-in">
-          <SizeStep
+          <DateStep
             v-if="currentStep === 1"
             :key="1"
-            :selected="selections.size"
+            :selected="selections.date"
             @select="(opt) => handleSelect(1, opt)"
           />
-          <FlavorStep
+          <SizeStep
             v-else-if="currentStep === 2"
             :key="2"
-            :selected="selections.flavor"
+            :selected="selections.size"
             @select="(opt) => handleSelect(2, opt)"
           />
-          <FillingStep
+          <FlavorStep
             v-else-if="currentStep === 3"
             :key="3"
-            :selected="selections.filling"
+            :selected="selections.flavor"
+            :pisos="selections.size?.pisos?.id || 1"
             @select="(opt) => handleSelect(3, opt)"
           />
-          <DesignStep
+          <FillingStep
             v-else-if="currentStep === 4"
             :key="4"
-            :selected="selections.design"
+            :selected="selections.filling"
             @select="(opt) => handleSelect(4, opt)"
           />
-          <DedicationStep
+          <DesignStep
             v-else-if="currentStep === 5"
             :key="5"
-            :selected="selections.dedication"
+            :selected="selections.design"
             @select="(opt) => handleSelect(5, opt)"
+          />
+          <DedicationStep
+            v-else-if="currentStep === 6"
+            :key="6"
+            :selected="selections.dedication"
+            @select="(opt) => handleSelect(6, opt)"
           />
           <OrderSummary
             v-else
-            :key="6"
+            :key="7"
             :selections="selections"
             @reset="reset"
           />
@@ -169,6 +184,19 @@ function reset() {
   font-size: 0.9rem;
   margin: 0;
   font-family: 'Nunito', sans-serif;
+}
+
+.builder-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .preview-area {

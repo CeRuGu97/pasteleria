@@ -7,6 +7,15 @@ const props = defineProps({
 
 defineEmits(['reset'])
 
+const hasTwoFlavors = computed(() => props.selections.flavor?.top)
+const flavorTopLabel = computed(() => props.selections.flavor?.top?.label || '')
+const flavorBottomLabel = computed(() => props.selections.flavor?.bottom?.label || '')
+const flavorLabel = computed(() => {
+  if (!props.selections.flavor) return '-'
+  if (hasTwoFlavors.value) return `Arriba: ${flavorTopLabel.value} · Abajo: ${flavorBottomLabel.value}`
+  return props.selections.flavor.label
+})
+
 const designLabel = computed(() => {
   const d = props.selections.design
   if (!d) return '-'
@@ -15,6 +24,13 @@ const designLabel = computed(() => {
   const fruitLabels = { fresas: 'Fresas', durazno: 'Durazno', kiwi: 'Kiwi', 'frutos-rojos': 'Frutos rojos' }
   const names = fruits.map(f => fruitLabels[f] || f).join(', ')
   return `Frutos encima: ${names}`
+})
+
+const formattedDate = computed(() => {
+  const d = props.selections.date
+  if (!d) return '-'
+  const [year, month, day] = d.split('-')
+  return `${day}/${month}/${year}`
 })
 
 const whatsappMessage = computed(() => {
@@ -32,13 +48,17 @@ const whatsappMessage = computed(() => {
 
   return encodeURIComponent(
     `🍰 ¡Hola! Quiero hacer un pedido:\n\n` +
+    (s.pastelName ? `🎂 Pastel de referencia: ${s.pastelName}\n\n` : '') +
+    `📅 Fecha de entrega: ${formattedDate.value}\n` +
     `📏 Pisos: ${s.size?.pisos?.label || '-'}\n` +
     `👥 Personas: ${s.size?.persons?.label || '-'}\n` +
-    `🍞 Sabor del pan: ${s.flavor?.label || '-'}\n` +
+    (hasTwoFlavors.value
+      ? `🍞 Sabor arriba: ${flavorTopLabel.value}\n🍞 Sabor abajo: ${flavorBottomLabel.value}\n`
+      : `🍞 Sabor del pan: ${s.flavor?.label || '-'}\n`) +
     `🍯 Relleno: ${s.filling?.label || '-'}\n` +
     designMsg +
     `💝 Dedicatoria: ${s.dedication || '-'}\n\n` +
-    `¿Podrían confirmarme disponibilidad y fecha de entrega? 🙏`
+    `¿Podrían confirmarme disponibilidad? 🙏`
   )
 })
 
@@ -53,6 +73,26 @@ const whatsappLink = computed(() => {
     <p class="summary-subtitle">Revisa los detalles de tu creación</p>
 
     <div class="summary-card">
+      <div v-if="selections.pastelName" class="summary-item">
+        <span class="summary-icon">🎂</span>
+        <div class="summary-info">
+          <span class="summary-label">Pastel de referencia</span>
+          <span class="summary-value">{{ selections.pastelName }}</span>
+        </div>
+      </div>
+
+      <div v-if="selections.pastelName" class="summary-divider"></div>
+
+      <div class="summary-item">
+        <span class="summary-icon">📅</span>
+        <div class="summary-info">
+          <span class="summary-label">Fecha de entrega</span>
+          <span class="summary-value">{{ formattedDate }}</span>
+        </div>
+      </div>
+
+      <div class="summary-divider"></div>
+
       <div class="summary-item">
         <span class="summary-icon">🎂</span>
         <div class="summary-info">
@@ -77,7 +117,7 @@ const whatsappLink = computed(() => {
         <span class="summary-icon">🍞</span>
         <div class="summary-info">
           <span class="summary-label">Sabor del pan</span>
-          <span class="summary-value">{{ selections.flavor?.label }}</span>
+          <span class="summary-value">{{ flavorLabel }}</span>
         </div>
       </div>
 
