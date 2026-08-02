@@ -27,7 +27,6 @@ function submit() {
         type="date"
         class="date-input"
         :min="new Date().toISOString().split('T')[0]"
-        @change="submit()"
       />
       <button
         class="continue-btn"
