@@ -31,6 +31,10 @@ const router = createRouter({
       name: 'builder',
       component: () => import('../views/CakeBuilderView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
+    }
   ],
 })
 
